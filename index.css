@@ -1,0 +1,26 @@
+body {
+  background: #0f172a;
+  color: white;
+  font-family: sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+textarea {
+  width: 90%;
+  height: 140px;
+  padding: 10px;
+}
+
+button {
+  margin-top: 12px;
+  padding: 12px 22px;
+  background: #0ea5e9;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.result.safe { color: #22c55e; }
+.result.unsafe { color: #ef4444; }

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Guard – SQL Injection Detector</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #38bdf8;
+            margin-bottom: 5px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 15px;
+            border: none;
+            outline: none;
+            resize: none;
+        }
+
+        button {
+            margin-top: 12px;
+            width: 100%;
+            padding: 12px;
+            background: #38bdf8;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            color: #0f172a;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0ea5e9;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .safe {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .unsafe {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .stats {
+            margin-top: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+
+        .stats span {
+            color: #38bdf8;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h2>AI Guard – SQL Injection Detector</h2>
+
+        <textarea id="query" placeholder="Enter SQL Query..."></textarea>
+
+        <button onclick="checkQuery()">Check Safety</button>
+
+        <div id="output"></div>
+
+        <div class="stats">
+            Total Queries Checked: <span id="total">0</span><br>
+            Safe Queries: <span id="safe_count">0</span><br>
+            Unsafe Queries: <span id="unsafe_count">0</span>
+        </div>
+    </div>
+
+    <script>
+        let total = 0;
+        let safe_count = 0;
+        let unsafe_count = 0;
+
+        async function checkQuery() {
+            const query = document.getElementById("query").value.trim();
+
+            if (query === "") {
+                alert("Please enter a query!");
+                return;
+            }
+
+            const response = await fetch("/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query })
+            });
+
+            const data = await response.json();
+            const outputDiv = document.getElementById("output");
+            outputDiv.innerHTML = "";
+
+            const resultBox = document.createElement("div");
+            resultBox.classList.add("result");
+
+            total += 1;
+
+            if (data.prediction === "safe") {
+                safe_count += 1;
+                resultBox.classList.add("safe");
+                resultBox.textContent = "✔ SAFE QUERY";
+            } else {
+                unsafe_count += 1;
+                resultBox.classList.add("unsafe");
+                resultBox.textContent = `❌ UNSAFE (${data.probability}%)`;
+            }
+
+            outputDiv.appendChild(resultBox);
+
+            // Update stats
+            document.getElementById("total").textContent = total;
+            document.getElementById("safe_count").textContent = safe_count;
+            document.getElementById("unsafe_count").textContent = unsafe_count;
+        }
+    </script>
+
+</body>
+</html>

